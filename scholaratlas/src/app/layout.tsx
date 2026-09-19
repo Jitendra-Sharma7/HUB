@@ -20,8 +20,8 @@ const merriweather = Merriweather({
 
 export const metadata: Metadata = {
   title: {
-    default: "ScholarAtlas | Global Scholarship Discovery Platform",
-    template: "%s | ScholarAtlas",
+    default: "Global Scholarship Hub | Global Scholarship Discovery Platform",
+    template: "%s | Global Scholarship Hub",
   },
   description:
     "Discover, filter, compare, save, and apply for scholarships, grants, fellowships, and financial-aid opportunities from around the world. Find the funding for your future.",
@@ -38,14 +38,14 @@ export const metadata: Metadata = {
     "PhD scholarships",
     "undergraduate scholarships",
   ],
-  authors: [{ name: "ScholarAtlas" }],
-  creator: "ScholarAtlas",
+  authors: [{ name: "Global Scholarship Hub" }],
+  creator: "Global Scholarship Hub",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://scholaratlas.org",
-    siteName: "ScholarAtlas",
-    title: "ScholarAtlas | Global Scholarship Discovery Platform",
+    url: "https://globalscholarshiphub.org",
+    siteName: "Global Scholarship Hub",
+    title: "Global Scholarship Hub | Global Scholarship Discovery Platform",
     description:
       "Discover, filter, compare, save, and apply for scholarships from around the world.",
     images: [

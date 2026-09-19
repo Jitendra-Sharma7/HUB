@@ -214,7 +214,7 @@ export default function ScholarshipDetailsPage() {
             <div>
               <p className="font-bold text-base">Ready to submit your application?</p>
               <p className="text-xs text-primary-100 mt-0.5">
-                Always submit directly through the official provider portal. ScholarAtlas charges no fees.
+                Always submit directly through the official provider portal. Global Scholarship Hub charges no fees.
               </p>
             </div>
             <a

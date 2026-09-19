@@ -10,7 +10,7 @@ export default function AboutPage() {
     <div className="bg-gray-50/50 min-h-screen py-12">
       <Container size="md">
         <div className="mb-10 text-center">
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-950">About ScholarAtlas</h1>
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-950">About Global Scholarship Hub</h1>
           <p className="mt-3 text-base text-gray-600 max-w-2xl mx-auto">
             A global scholarship discovery platform helping students worldwide access verified funding opportunities for higher education.
           </p>
@@ -21,7 +21,7 @@ export default function AboutPage() {
           <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-xs">
             <h2 className="text-xl font-bold text-gray-900 mb-3">Our Mission</h2>
             <p className="text-sm text-gray-700 leading-relaxed">
-              ScholarAtlas was created to democratize access to global education funding. We believe financial constraints should never prevent talented students from pursuing their academic dreams. By aggregating verified scholarships from governments, universities, foundations, and NGOs worldwide, we provide a centralized, trustworthy platform for scholarship discovery.
+              Global Scholarship Hub was created to democratize access to global education funding. We believe financial constraints should never prevent talented students from pursuing their academic dreams. By aggregating verified scholarships from governments, universities, foundations, and NGOs worldwide, we provide a centralized, trustworthy platform for scholarship discovery.
             </p>
           </div>
 

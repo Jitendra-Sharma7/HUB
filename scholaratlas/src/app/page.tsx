@@ -396,9 +396,6 @@ export default function HomePage() {
                 href={`/scholarships?field=${encodeURIComponent(f.name)}`}
                 className="group flex items-center gap-3 rounded-2xl border border-gray-200 bg-white p-4 transition-all hover:border-primary-400 hover:bg-primary-50/30 shadow-xs"
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-xl border border-gray-100 group-hover:bg-white">
-                  {f.icon}
-                </span>
                 <div className="min-w-0">
                   <h3 className="font-semibold text-sm text-gray-900 group-hover:text-primary-700 truncate">
                     {f.name}
@@ -416,7 +413,7 @@ export default function HomePage() {
         <Container>
           <div className="mx-auto max-w-2xl text-center mb-12">
             <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-              How ScholarAtlas Works
+              How Global Scholarship Hub Works
             </h2>
             <p className="mt-2 text-sm text-gray-500">
               A transparent, trusted process from initial discovery to submitting on the official portal.

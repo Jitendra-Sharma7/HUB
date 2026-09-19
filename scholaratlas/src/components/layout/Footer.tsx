@@ -11,9 +11,9 @@ export function Footer() {
             <div className="col-span-1 sm:col-span-2">
               <Link href="/" className="flex items-center gap-2">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600 text-white font-bold text-lg">
-                  SA
+                  GSH
                 </div>
-                <span className="text-xl font-bold text-white">ScholarAtlas</span>
+                <span className="text-xl font-bold text-white">Global Scholarship Hub</span>
               </Link>
               <p className="mt-4 max-w-sm text-sm text-gray-400">
                 Helping students worldwide discover, compare, and apply for scholarships, grants, fellowships, and financial-aid opportunities.
@@ -122,14 +122,11 @@ export function Footer() {
 
             <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-800 pt-6 sm:flex-row">
               <p className="text-sm text-gray-500">
-                © 2026 ScholarAtlas. All rights reserved.
+                © 2026 Global Scholarship Hub. All rights reserved.
               </p>
-              <Flex align="center" gap="1.5">
-                <Heart className="h-4 w-4 text-gray-500" />
-                <span className="text-sm text-gray-500">Built for students, by education enthusiasts.</span>
-              </Flex>
+              <span className="text-sm text-gray-500">Built for students, by education enthusiasts.</span>
               <p className="text-xs text-gray-600">
-                Disclaimer: ScholarAtlas is an information platform. We do not guarantee eligibility or acceptance. Always verify requirements with official providers.
+                Disclaimer: Global Scholarship Hub is an information platform. We do not guarantee eligibility or acceptance. Always verify requirements with official providers.
               </p>
             </div>
           </div>
