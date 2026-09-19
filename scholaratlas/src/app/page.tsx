@@ -6,18 +6,8 @@ import { useRouter } from "next/navigation";
 import {
   Search,
   ArrowRight,
-  Globe,
-  GraduationCap,
-  Sparkles,
   ShieldCheck,
-  CheckCircle2,
-  Calendar,
-  BookOpen,
-  DollarSign,
-  TrendingUp,
-  MapPin,
-  ChevronRight,
-  Award
+  CheckCircle2
 } from "lucide-react";
 import { Container, Flex, Grid } from "@/components/layout/Layout";
 import { ScholarshipCard } from "@/components/scholarships/ScholarshipCard";
@@ -104,7 +94,6 @@ export default function HomePage() {
                 href="/finder"
                 className="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3.5 text-base font-semibold text-white shadow-md shadow-primary-500/20 transition-all hover:bg-primary-700 hover:shadow-lg"
               >
-                <Sparkles className="h-5 w-5" />
                 Find My Scholarships (AI Matcher)
               </Link>
 
@@ -245,7 +234,6 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
             <div>
               <div className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-primary-600">
-                <Award className="h-4 w-4" />
                 Featured Programs
               </div>
               <h2 className="mt-1 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
@@ -259,8 +247,7 @@ export default function HomePage() {
               href="/scholarships"
               className="mt-4 sm:mt-0 inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-700"
             >
-              View all scholarships
-              <ChevronRight className="h-4 w-4" />
+              View all scholarships →
             </Link>
           </div>
 
@@ -287,7 +274,6 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-4">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-800/80 px-3 py-1 text-xs font-semibold text-primary-200">
-                <Sparkles className="h-3.5 w-3.5 text-amber-300" />
                 Personalized Eligibility Questionnaire
               </span>
               <h2 className="text-3xl font-extrabold sm:text-4xl leading-tight">
@@ -345,7 +331,6 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
             <div>
               <div className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-primary-600">
-                <Globe className="h-4 w-4" />
                 Study Destinations
               </div>
               <h2 className="mt-1 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
@@ -359,8 +344,7 @@ export default function HomePage() {
               href="/countries"
               className="mt-4 sm:mt-0 inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-700"
             >
-              All 20+ countries
-              <ChevronRight className="h-4 w-4" />
+              All 20+ countries →
             </Link>
           </div>
 
@@ -388,7 +372,6 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
             <div>
               <div className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-primary-600">
-                <GraduationCap className="h-4 w-4" />
                 Disciplines
               </div>
               <h2 className="mt-1 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
@@ -402,8 +385,7 @@ export default function HomePage() {
               href="/fields"
               className="mt-4 sm:mt-0 inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-700"
             >
-              All fields
-              <ChevronRight className="h-4 w-4" />
+              All fields →
             </Link>
           </div>
 
@@ -510,7 +492,6 @@ export default function HomePage() {
       <section className="py-16 bg-gray-900 text-white">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
-            <Calendar className="h-10 w-10 text-primary-400 mx-auto mb-4" />
             <h2 className="text-3xl font-extrabold sm:text-4xl">
               Never Miss a Scholarship Deadline
             </h2>

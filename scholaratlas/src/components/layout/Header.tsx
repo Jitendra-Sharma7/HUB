@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Search, Globe, User, LogOut, Bell, Settings, BookOpen } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container, Flex } from "@/components/layout/Layout";
 import { cn } from "@/lib/utils";
@@ -65,8 +65,8 @@ export function Header() {
         <Flex justify="between" align="center" className="h-16 lg:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600 text-white">
-              <BookOpen className="h-6 w-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600 text-white font-bold text-lg">
+              SA
             </div>
             <span className="text-xl font-bold text-gray-900">ScholarAtlas</span>
           </Link>
@@ -95,20 +95,12 @@ export function Header() {
           {/* Right Actions */}
           <Flex align="center" gap="2">
             <Link href="/scholarships" className="hidden sm:flex">
-              <Button variant="ghost" size="sm" leftIcon={<Search className="h-4 w-4" />}>
+              <Button variant="ghost" size="sm">
                 Search
               </Button>
             </Link>
-            <button className="hidden rounded-lg p-2 text-gray-600 hover:bg-gray-100 sm:flex" aria-label="Language">
-              <Globe className="h-5 w-5" />
-            </button>
             {isAuthenticated ? (
               <Flex align="center" gap="2">
-                <Link href="/dashboard" className="hidden sm:flex">
-                  <Button variant="ghost" size="sm" leftIcon={<Bell className="h-4 w-4" />}>
-                    <span className="hidden md:inline">Alerts</span>
-                  </Button>
-                </Link>
                 <Link href="/dashboard">
                   <button className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-gray-100">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-sm font-semibold text-primary-700">
@@ -121,10 +113,10 @@ export function Header() {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="hidden rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 sm:block"
+                  className="hidden rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 sm:block"
                   aria-label="Logout"
                 >
-                  <LogOut className="h-5 w-5" />
+                  Logout
                 </button>
               </Flex>
             ) : (

@@ -4,11 +4,6 @@ import React from "react";
 import Link from "next/link";
 import {
   Bookmark,
-  Share2,
-  ExternalLink,
-  Calendar,
-  MapPin,
-  GraduationCap,
   CheckCircle2,
   AlertCircle,
   Layers
@@ -139,17 +134,14 @@ export function ScholarshipCard({
         {/* Key Info Pills */}
         <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-gray-600 sm:grid-cols-3">
           <div className="flex items-center gap-1.5 rounded-lg bg-gray-50 p-2">
-            <MapPin className="h-3.5 w-3.5 text-gray-400 shrink-0" />
             <span className="truncate">{country?.flag} {country?.name || "Global"}</span>
           </div>
 
           <div className="flex items-center gap-1.5 rounded-lg bg-gray-50 p-2">
-            <GraduationCap className="h-3.5 w-3.5 text-gray-400 shrink-0" />
             <span className="truncate">{scholarship.degreeLevels.join(", ")}</span>
           </div>
 
           <div className="flex items-center gap-1.5 rounded-lg bg-gray-50 p-2 col-span-2 sm:col-span-1">
-            <Calendar className="h-3.5 w-3.5 text-gray-400 shrink-0" />
             <span className="truncate font-medium">{formatDate(scholarship.deadline)}</span>
           </div>
         </div>
