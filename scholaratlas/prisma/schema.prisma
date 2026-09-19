@@ -1,0 +1,263 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  country       String?
+  age           Int?
+  dateOfBirth   DateTime?
+  educationLevel String?
+  currentDegree String?
+  desiredDegree String?
+  fieldOfStudy  String?
+  gpa           Float?
+  achievements  String[]
+  languageProf  String?
+  ielts         Float?
+  toefl         Float?
+  gre           Float?
+  gmat          Float?
+  financialNeed Boolean?
+  workExp       String?
+  researchExp   String?
+  extracurricular String?
+  leadership    String?
+  volunteer     String?
+  targetCountries String[]
+  targetUniversities String[]
+  studyMode     String?
+  fundingLevel  String?
+  bio           String?
+  avatar        String?
+  role          String   @default("user")
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  savedScholarships SavedScholarship[]
+  applications      Application[]
+  documents         Document[]
+  notifications     Notification[]
+  alerts            Alert[]
+}
+
+model SavedScholarship {
+  id           String     @id @default(cuid())
+  userId       String
+  scholarshipId String
+  createdAt    DateTime @default(now())
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scholarship  Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scholarshipId])
+}
+
+model Application {
+  id            String    @id @default(cuid())
+  userId        String
+  scholarshipId String
+  status        String    @default("Interested")
+  deadline      DateTime?
+  submittedAt   DateTime?
+  notes         String?
+  contactPerson String?
+  applicationUrl String?
+  reminder      DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scholarship   Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Alert {
+  id            String   @id @default(cuid())
+  userId        String
+  citizenship   String?
+  degree        String?
+  field         String?
+  country       String?
+  fundingType   String?
+  deadlineRange String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id        String    @id @default(cuid())
+  userId    String
+  name      String
+  type      String
+  fileUrl   String
+  status    String    @default("Missing")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Scholarship {
+  id                 String   @id @default(cuid())
+  title              String
+  providerId         String?
+  universityId       String?
+  countryId          String?
+  description        String?
+  degreeLevels       String[]
+  fields             String[]
+  eligibleCountries  String[]
+  fundingType        String
+  fundingAmount      Float?
+  currency           String?
+  tuitionCoverage    Boolean  @default(false)
+  accommodationCoverage Boolean @default(false)
+  livingStipend      Float?
+  travelAllowance    Float?
+  healthInsurance    Boolean  @default(false)
+  visaSupport        Boolean  @default(false)
+  researchFunding    Boolean  @default(false)
+  applicationFee     Float?
+  deadline           DateTime?
+  openingDate        DateTime?
+  duration           String?
+  numAwards          Int?
+  minGpa             Float?
+  ageRequirement     Int?
+  languageReqs       String[]
+  ieltsReq           Float?
+  toeflReq           Float?
+  otherTestReqs      String[]
+  academicReqs       String[]
+  financialNeedReq   Boolean  @default(false)
+  workExpReq        String?
+  documentsRequired  String[]
+  selectionCriteria  String[]
+  applicationProcess String[]
+  applicationUrl     String?
+  officialUrl        String?
+  providerContact    String?
+  lastVerifiedAt     DateTime?
+  source             String
+  verificationStatus String   @default("Verification Required")
+  status             String   @default("Open")
+  region             String?
+  isDemo             Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  provider     Provider?     @relation(fields: [providerId], references: [id], onDelete: SetNull)
+  university   University?  @relation(fields: [universityId], references: [id], onDelete: SetNull)
+  country      Country?     @relation(fields: [countryId], references: [id], onDelete: SetNull)
+  savedBy      SavedScholarship[]
+  applications Application[]
+}
+
+model Provider {
+  id          String       @id @default(cuid())
+  name        String
+  type        String
+  country     String?
+  website     String?
+  description String?
+  verified    Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  scholarships Scholarship[]
+}
+
+model University {
+  id          String       @id @default(cuid())
+  name        String
+  country     String
+  city        String?
+  website     String?
+  description String?
+  programs    String[]
+  tuitionInfo String?
+  admissionInfo String?
+  internationalInfo String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  scholarships Scholarship[]
+}
+
+model Country {
+  id        String       @id @default(cuid())
+  name      String
+  code      String
+  region    String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  scholarships Scholarship[]
+}
+
+model Field {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String
+  createdAt DateTime @default(now())
+}
+
+model Guide {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String
+  category  String
+  content   String
+  excerpt   String?
+  published Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String
+  category  String
+  content   String
+  excerpt   String?
+  author    String?
+  published Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Page {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String
+  content   String
+  metaTitle String?
+  metaDescription String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
