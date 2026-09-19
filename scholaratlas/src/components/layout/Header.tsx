@@ -87,7 +87,7 @@ export function Header() {
                   )}
                 >
                   {item.label}
-                </link>
+                </Link>
               );
             })}
           </nav>

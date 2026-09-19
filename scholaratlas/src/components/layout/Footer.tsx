@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Container, Flex, Grid } from "@/components/layout/Layout";
-import { BookOpen, Globe, Mail, Phone, Heart, Facebook, Twitter, Instagram, LinkedIn } from "lucide-react";
+import { BookOpen, Globe, Mail, Phone, Heart, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -20,7 +20,7 @@ export function Footer() {
                 Helping students worldwide discover, compare, and apply for scholarships, grants, fellowships, and financial-aid opportunities.
               </p>
               <Flex align="center" gap="3" className="mt-6">
-                {[Facebook, Twitter, Instagram, LinkedIn].map((Icon, i) => (
+                {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
                   <a
                     key={i}
                     href="#"
