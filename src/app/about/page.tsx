@@ -84,7 +84,7 @@ export default function AboutPage() {
             <Heart className="h-10 w-10 text-primary-600 mx-auto mb-3" />
             <h2 className="text-xl font-bold text-gray-900">Built for Students, by Education Advocates</h2>
             <p className="mt-2 text-sm text-gray-600 max-w-lg mx-auto">
-              Have questions, found an issue, or want to partner with us? We'd love to hear from you.
+              Have questions, found an issue, or want to partner with us? We&apos;d love to hear from you.
             </p>
             <Link
               href="/contact"
