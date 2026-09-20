@@ -139,10 +139,6 @@ scholaratlas/
 | `/submit-scholarship` | Public submission form |
 | `/admin` | Admin dashboard |
 
-## 🔐 Authentication
-
-For MVP demonstration, any email and password combination will work:
-- Try: `student@example.com` / `password123`
 
 ## 🗄️ Database
 
