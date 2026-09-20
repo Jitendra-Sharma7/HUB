@@ -2,13 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Shield, Database, Eye, CheckCircle2, AlertTriangle, TrendingUp, Users, Search, Plus } from "lucide-react";
+import { Shield, Database, Eye, AlertTriangle, TrendingUp, Users, Search, Plus, LogIn, Lock } from "lucide-react";
 import { Container } from "@/components/layout/Layout";
 import { api } from "@/lib/data/store";
 import type { ScholarshipData } from "@/lib/data/mock-scholarships";
 import { formatDate } from "@/lib/utils";
 
 export default function AdminDashboardPage() {
+  const [adminAuthenticated, setAdminAuthenticated] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [adminUserId, setAdminUserId] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [authError, setAuthError] = useState("");
   const [scholarships, setScholarships] = useState<ScholarshipData[]>([]);
   const [filter, setFilter] = useState<"all" | "needs-verification" | "expired">("all");
   const [loading, setLoading] = useState(true);
@@ -23,6 +28,30 @@ export default function AdminDashboardPage() {
     deadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 45).toISOString().slice(0, 10),
   });
 
+  useEffect(() => {
+    setAdminAuthenticated(window.sessionStorage.getItem("global-scholarship-hub-admin") === "true");
+    setAuthChecked(true);
+  }, []);
+
+  const handleAdminLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (adminUserId === "admin@example.com" && adminPassword === "admin123") {
+      window.sessionStorage.setItem("global-scholarship-hub-admin", "true");
+      setAdminAuthenticated(true);
+      setAuthError("");
+      setAdminPassword("");
+      return;
+    }
+
+    setAuthError("Invalid admin user ID or password.");
+  };
+
+  const handleAdminLogout = () => {
+    window.sessionStorage.removeItem("global-scholarship-hub-admin");
+    setAdminAuthenticated(false);
+  };
+
   const loadScholarships = async () => {
     setLoading(true);
     try {
@@ -34,8 +63,10 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
-    loadScholarships();
-  }, []);
+    if (adminAuthenticated) {
+      loadScholarships();
+    }
+  }, [adminAuthenticated]);
 
   const handleAddScholarship = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,6 +131,68 @@ export default function AdminDashboardPage() {
       ? scholarships.filter((s) => s.status === "Closed" || s.status === "Expired")
       : scholarships;
 
+  if (!authChecked) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50/50">
+        <p className="text-sm text-gray-500">Checking admin access...</p>
+      </div>
+    );
+  }
+
+  if (!adminAuthenticated) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50/50 px-4 py-12">
+        <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+          <div className="mb-6 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 text-red-700">
+              <Lock className="h-6 w-6" />
+            </div>
+            <h1 className="mt-4 text-2xl font-extrabold text-gray-950">Admin Sign In</h1>
+            <p className="mt-1 text-sm text-gray-600">Enter the admin user ID and password to manage the scholarship hub.</p>
+          </div>
+
+          <form onSubmit={handleAdminLogin} className="space-y-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Admin user ID
+              <input
+                type="email"
+                required
+                value={adminUserId}
+                onChange={(e) => setAdminUserId(e.target.value)}
+                placeholder="admin@example.com"
+                className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </label>
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+              <input
+                type="password"
+                required
+                value={adminPassword}
+                onChange={(e) => setAdminPassword(e.target.value)}
+                placeholder="Enter admin password"
+                className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </label>
+            {authError && <p className="text-sm text-red-600">{authError}</p>}
+            <button
+              type="submit"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-700"
+            >
+              <LogIn className="h-4 w-4" />
+              Open Admin Dashboard
+            </button>
+          </form>
+
+          <div className="mt-5 rounded-xl border border-gray-200 bg-gray-50 p-3 text-center text-xs text-gray-600">
+            Demo admin: <span className="font-semibold text-gray-900">admin@example.com</span> /{" "}
+            <span className="font-semibold text-gray-900">admin123</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-gray-50/50 min-h-screen py-8">
       <Container>
@@ -115,12 +208,21 @@ export default function AdminDashboardPage() {
               Manage scholarships, verify submissions, and monitor platform analytics.
             </p>
           </div>
-          <Link
-            href="/scholarships"
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50"
-          >
-            Back to Public Site
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/scholarships"
+              className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50"
+            >
+              Back to Public Site
+            </Link>
+            <button
+              type="button"
+              onClick={handleAdminLogout}
+              className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold text-red-700 hover:bg-red-100"
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
 
         {/* Stats Grid */}
