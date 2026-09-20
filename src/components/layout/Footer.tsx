@@ -66,7 +66,7 @@ export function Footer() {
                   { label: "Partner With Us", href: "/advertise" },
                   { label: "Advertise", href: "/advertise" },
                 ].map((item) => (
-                  <li key={item.href}>
+                  <li key={`${item.label}-${item.href}`}>
                     <Link href={item.href} className="text-sm text-gray-400 transition-colors hover:text-white">
                       {item.label}
                     </Link>
