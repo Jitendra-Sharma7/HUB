@@ -5,26 +5,89 @@ import Link from "next/link";
 import { Shield, Database, Eye, CheckCircle2, AlertTriangle, TrendingUp, Users, Search, Plus } from "lucide-react";
 import { Container } from "@/components/layout/Layout";
 import { api } from "@/lib/data/store";
-import { ScholarshipData } from "@/lib/data/mock-scholarships";
+import type { ScholarshipData } from "@/lib/data/mock-scholarships";
 import { formatDate } from "@/lib/utils";
 
 export default function AdminDashboardPage() {
   const [scholarships, setScholarships] = useState<ScholarshipData[]>([]);
   const [filter, setFilter] = useState<"all" | "needs-verification" | "expired">("all");
   const [loading, setLoading] = useState(true);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [removingId, setRemovingId] = useState<string | null>(null);
+  const [draft, setDraft] = useState({
+    title: "",
+    providerId: "",
+    countryId: "us",
+    description: "",
+    deadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 45).toISOString().slice(0, 10),
+  });
+
+  const loadScholarships = async () => {
+    setLoading(true);
+    try {
+      const res = await api.getScholarships({ limit: 200, status: "all" });
+      setScholarships(res.data);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function load() {
-      setLoading(true);
-      try {
-        const res = await api.getScholarships({ limit: 50 });
-        setScholarships(res.data);
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
+    loadScholarships();
   }, []);
+
+  const handleAddScholarship = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!draft.title.trim() || !draft.providerId.trim()) return;
+
+    setSubmitting(true);
+    try {
+      const created = await api.addScholarship({
+        title: draft.title.trim(),
+        providerId: draft.providerId.trim(),
+        countryId: draft.countryId,
+        description: draft.description.trim() || `Opportunity from ${draft.providerId.trim()}.`,
+        deadline: new Date(`${draft.deadline}T23:59:59Z`).toISOString(),
+        fundingType: "fully-funded",
+        fields: ["All"],
+        degreeLevels: ["Master's"],
+        eligibleCountries: ["All"],
+        languageReqs: ["English proficiency"],
+        documentsRequired: ["Application form"],
+        fundingAmount: 5000,
+        livingStipend: 1200,
+        status: "Open",
+        verificationStatus: "Verification Needed",
+        lastVerifiedAt: new Date().toISOString(),
+      });
+
+      setScholarships((prev) => [created, ...prev]);
+      setShowAddForm(false);
+      setDraft({
+        title: "",
+        providerId: "",
+        countryId: "us",
+        description: "",
+        deadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 45).toISOString().slice(0, 10),
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleRemoveScholarship = async (id: string) => {
+    setRemovingId(id);
+    try {
+      const success = await api.removeScholarship(id);
+      if (success) {
+        setScholarships((prev) => prev.filter((s) => s.id !== id));
+      }
+    } finally {
+      setRemovingId(null);
+    }
+  };
 
   const needsVerification = scholarships.filter(
     (s) => s.verificationStatus === "Verification Needed" || s.verificationStatus === "Potentially Expired"
@@ -100,14 +163,100 @@ export default function AdminDashboardPage() {
             ))}
           </div>
 
-          <Link
-            href="/submit-scholarship"
+          <button
+            type="button"
+            onClick={() => setShowAddForm((prev) => !prev)}
             className="inline-flex items-center gap-1.5 rounded-xl bg-primary-600 px-4 py-2 text-xs font-semibold text-white hover:bg-primary-700"
           >
             <Plus className="h-3.5 w-3.5" />
-            Add Scholarship
-          </Link>
+            {showAddForm ? "Close Form" : "Add Scholarship"}
+          </button>
         </div>
+
+        {showAddForm && (
+          <form onSubmit={handleAddScholarship} className="mb-6 rounded-2xl border border-dashed border-primary-200 bg-white p-5 shadow-xs">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-sm font-bold text-gray-900">Create Scholarship Entry</h2>
+                <p className="text-xs text-gray-600">Add a scholarship to the public global database.</p>
+              </div>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="text-xs font-medium text-gray-700">
+                Scholarship title
+                <input
+                  required
+                  value={draft.title}
+                  onChange={(e) => setDraft((prev) => ({ ...prev, title: e.target.value }))}
+                  className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="e.g. Global Excellence Award"
+                />
+              </label>
+              <label className="text-xs font-medium text-gray-700">
+                Provider name
+                <input
+                  required
+                  value={draft.providerId}
+                  onChange={(e) => setDraft((prev) => ({ ...prev, providerId: e.target.value }))}
+                  className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="e.g. Global Fund"
+                />
+              </label>
+              <label className="text-xs font-medium text-gray-700">
+                Country
+                <select
+                  value={draft.countryId}
+                  onChange={(e) => setDraft((prev) => ({ ...prev, countryId: e.target.value }))}
+                  className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="us">United States</option>
+                  <option value="gb">United Kingdom</option>
+                  <option value="de">Germany</option>
+                  <option value="ca">Canada</option>
+                  <option value="au">Australia</option>
+                  <option value="ch">Switzerland</option>
+                  <option value="sg">Singapore</option>
+                  <option value="nl">Netherlands</option>
+                </select>
+              </label>
+              <label className="text-xs font-medium text-gray-700">
+                Deadline
+                <input
+                  type="date"
+                  value={draft.deadline}
+                  onChange={(e) => setDraft((prev) => ({ ...prev, deadline: e.target.value }))}
+                  className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </label>
+            </div>
+            <label className="mt-4 block text-xs font-medium text-gray-700">
+              Description
+              <textarea
+                rows={3}
+                value={draft.description}
+                onChange={(e) => setDraft((prev) => ({ ...prev, description: e.target.value }))}
+                className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                placeholder="Brief overview for the public scholarship listing"
+              />
+            </label>
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowAddForm(false)}
+                className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="rounded-xl bg-primary-600 px-4 py-2 text-xs font-semibold text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {submitting ? "Adding..." : "Save Scholarship"}
+              </button>
+            </div>
+          </form>
+        )}
 
         {/* Scholarship Management Table */}
         <div className="rounded-2xl border border-gray-200 bg-white shadow-xs overflow-hidden">
@@ -184,6 +333,14 @@ export default function AdminDashboardPage() {
                           </Link>
                           <button className="rounded-lg border border-gray-200 px-2 py-1 text-[11px] font-semibold text-gray-700 hover:bg-gray-50">
                             Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveScholarship(s.id)}
+                            disabled={removingId === s.id}
+                            className="rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-[11px] font-semibold text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {removingId === s.id ? "Removing..." : "Remove"}
                           </button>
                           <button className="rounded-lg bg-emerald-50 border border-emerald-200 px-2 py-1 text-[11px] font-semibold text-emerald-700 hover:bg-emerald-100">
                             ✓ Verify

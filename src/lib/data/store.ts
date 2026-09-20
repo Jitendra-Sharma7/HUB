@@ -2,7 +2,7 @@ import { mockCountries, CountryData } from './mock-countries';
 import { mockFields, FieldData } from './mock-fields';
 import { mockUniversities, UniversityData } from './mock-universities';
 import { mockProviders, ProviderData } from './mock-providers';
-import { databaseScholarships, ScholarshipData } from './mock-scholarships';
+import { databaseScholarships } from './mock-scholarships';
 
 export interface FilterOptions {
   query?: string;
@@ -26,7 +26,7 @@ export interface PaginatedResult<T> {
 // Data fetching layer to simulate a database or API
 export const api = {
   // --- Scholarships ---
-  getScholarships: async (filters: FilterOptions): Promise<PaginatedResult<ScholarshipData>> => {
+  getScholarships: async (filters: FilterOptions): Promise<PaginatedResult<any>> => {
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 300));
 
@@ -65,9 +65,9 @@ export const api = {
       result = result.filter(s => s.fundingType === filters.funding);
     }
 
-    if (filters.status) {
+    if (filters.status && filters.status.toLowerCase() !== 'all') {
       result = result.filter(s => s.status.toLowerCase() === filters.status!.toLowerCase());
-    } else {
+    } else if (!filters.status) {
       // Default to showing Open and Opening Soon
       result = result.filter(s => s.status === 'Open' || s.status === 'Opening Soon');
     }
@@ -89,8 +89,60 @@ export const api = {
     };
   },
 
-  getScholarshipById: async (id: string): Promise<ScholarshipData | undefined> => {
+  getScholarshipById: async (id: string): Promise<any> => {
     return databaseScholarships.find(s => s.id === id);
+  },
+
+  addScholarship: async (scholarship: any): Promise<any> => {
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const newScholarship: any = {
+      id: scholarship.id || `sch-${Date.now()}`,
+      title: scholarship.title.trim(),
+      providerId: scholarship.providerId.trim(),
+      universityId: scholarship.universityId,
+      countryId: scholarship.countryId,
+      description: scholarship.description.trim(),
+      degreeLevels: scholarship.degreeLevels || ['Master\'s'],
+      fields: scholarship.fields || ['All'],
+      eligibleCountries: scholarship.eligibleCountries || ['All'],
+      fundingType: scholarship.fundingType || 'fully-funded',
+      fundingAmount: scholarship.fundingAmount,
+      currency: scholarship.currency || 'USD',
+      tuitionCoverage: scholarship.tuitionCoverage ?? true,
+      accommodationCoverage: scholarship.accommodationCoverage ?? true,
+      livingStipend: scholarship.livingStipend ?? 1200,
+      travelAllowance: scholarship.travelAllowance ?? true,
+      healthInsurance: scholarship.healthInsurance ?? true,
+      visaSupport: scholarship.visaSupport ?? true,
+      applicationFee: scholarship.applicationFee ?? 0,
+      deadline: scholarship.deadline,
+      openingDate: scholarship.openingDate,
+      duration: scholarship.duration || '1 Year',
+      numAwards: scholarship.numAwards || 1,
+      minGpa: scholarship.minGpa,
+      languageReqs: scholarship.languageReqs || ['English proficiency'],
+      documentsRequired: scholarship.documentsRequired || ['Application form'],
+      applicationUrl: scholarship.applicationUrl || 'https://example.com/apply',
+      officialUrl: scholarship.officialUrl || 'https://example.com',
+      verificationStatus: scholarship.verificationStatus || 'Verification Needed',
+      lastVerifiedAt: scholarship.lastVerifiedAt || new Date().toISOString(),
+      status: scholarship.status || 'Open',
+      featured: scholarship.featured || false,
+    };
+
+    databaseScholarships.unshift(newScholarship);
+    return newScholarship;
+  },
+
+  removeScholarship: async (id: string): Promise<boolean> => {
+    await new Promise(resolve => setTimeout(resolve, 150));
+
+    const index = databaseScholarships.findIndex(s => s.id === id);
+    if (index === -1) return false;
+
+    databaseScholarships.splice(index, 1);
+    return true;
   },
 
   // --- Countries ---
@@ -127,7 +179,7 @@ export const api = {
   },
 
   // --- Matching Engine Algorithm ---
-  findMatches: async (userProfile: any): Promise<{scholarship: ScholarshipData, score: number, reasons: string[]}[]> => {
+  findMatches: async (userProfile: any): Promise<{scholarship: any, score: number, reasons: string[]}[]> => {
     // A simplified matching algorithm demonstrating the MVP behavior for AI matching
     await new Promise(resolve => setTimeout(resolve, 800)); // Simulate complex calculation
 
