@@ -2,6 +2,19 @@
   "name": "scholaratlas",
   "version": "1.0.0",
   "private": true,
+  "description": "A comprehensive, production-ready scholarship discovery platform built with Next.js 16, React 19, TypeScript, Tailwind CSS v4, and Prisma.",
+  "homepage": "https://github.com/Jitendra-Sharma7/HUB#readme",
+  "bugs": {
+    "url": "https://github.com/Jitendra-Sharma7/HUB/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jitendra-Sharma7/HUB.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
